@@ -4,48 +4,60 @@ import Form from './components/Form';
 class App extends React.Component {
   state = {
     cardName: '',
-    description: '',
-    attr1: 0,
-    attr2: 0,
-    attr3: 0,
-    img: '',
-    rarity: '',
-    trunfo: false,
+    cardDescription: '',
+    cardAttr1: '',
+    cardAttr2: '',
+    cardAttr3: '',
+    cardImage: '',
+    cardRare: '',
+    cardTrunfo: false,
+    hasTrunfo: false,
+    isSaveButtonDisabled: false,
   };
 
-  handleChange = ({ target }) => {
+  onInputChange = ({ target }) => {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({ [name]: value });
+  };
+
+  onSaveButtonClick = (e) => {
+    e.preventDefault();
   };
 
   render() {
     const {
       state: {
         cardName,
-        description,
-        attr1,
-        attr2,
-        attr3,
-        img,
-        rarity,
-        trunfo,
+        cardDescription,
+        cardAttr1,
+        cardAttr2,
+        cardAttr3,
+        cardImage,
+        cardRare,
+        cardTrunfo,
+        hasTrunfo,
+        isSaveButtonDisabled,
       },
-      handleChange,
+      onInputChange,
+      onSaveButtonClick,
     } = this;
     return (
       <div>
         <h1>Tryunfo</h1>
         <Form
           cardName={ cardName }
-          description={ description }
-          handleChange={ handleChange }
-          attr1={ attr1 }
-          attr2={ attr2 }
-          attr3={ attr3 }
-          img={ img }
-          rarity={ rarity }
-          trunfo={ trunfo }
+          cardDescription={ cardDescription }
+          cardAttr1={ cardAttr1 }
+          cardAttr2={ cardAttr2 }
+          cardAttr3={ cardAttr3 }
+          cardImage={ cardImage }
+          cardRare={ cardRare }
+          cardTrunfo={ cardTrunfo }
+          hasTrunfo={ hasTrunfo }
+          isSaveButtonDisabled={ isSaveButtonDisabled }
+          onInputChange={ onInputChange }
+          onSaveButtonClick={ onSaveButtonClick }
         />
       </div>
     );
