@@ -39,8 +39,9 @@ class App extends React.Component {
           savedCardRare: prevState.cardRare,
           savedCardTrunfo: prevState.cardTrunfo }],
     }), () => {
+      const { cardsList } = this.state;
       this.setState({ cardTrunfo: false });
-      console.log(this.state.cardsList);
+      console.log(cardsList);
     });
   };
 
