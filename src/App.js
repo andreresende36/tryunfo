@@ -15,11 +15,12 @@ class App extends React.Component {
     cardTrunfo: false,
     hasTrunfo: false,
     isSaveButtonDisabled: true,
+    cardsList: [],
   };
 
   onSaveButtonClick = (e) => {
     e.preventDefault();
-    this.setState({
+    this.setState((prevState) => ({
       cardName: '',
       cardDescription: '',
       cardImage: '',
@@ -27,7 +28,19 @@ class App extends React.Component {
       cardAttr2: '0',
       cardAttr3: '0',
       cardRare: 'normal',
-      hasTrunfo: !!cardTrunfo,
+      hasTrunfo: !!prevState.cardTrunfo,
+      cardsList: [...prevState.cardsList,
+        { savedCardName: prevState.cardName,
+          savedCardDescription: prevState.cardDescription,
+          savedCardAttr1: prevState.cardAttr1,
+          savedCardAttr2: prevState.cardAttr2,
+          savedCardAttr3: prevState.cardAttr3,
+          savedCardImage: prevState.cardImage,
+          savedCardRare: prevState.cardRare,
+          savedCardTrunfo: prevState.cardTrunfo }],
+    }), () => {
+      this.setState({ cardTrunfo: false });
+      console.log(this.state.cardsList);
     });
   };
 
@@ -85,6 +98,7 @@ class App extends React.Component {
         cardTrunfo,
         hasTrunfo,
         isSaveButtonDisabled,
+        cardsList,
       },
       onInputChange,
       onSaveButtonClick,
@@ -116,6 +130,33 @@ class App extends React.Component {
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
         />
+        {/* Lista de cards */}
+        { cardsList.map((card) => {
+          const {
+            savedCardName,
+            savedCardDescription,
+            savedCardAttr1,
+            savedCardAttr2,
+            savedCardAttr3,
+            savedCardImage,
+            savedCardRare,
+            savedCardTrunfo,
+          } = card;
+          return (
+            <Card
+              key={ savedCardName }
+              cardName={ savedCardName }
+              cardDescription={ savedCardDescription }
+              cardAttr1={ savedCardAttr1 }
+              cardAttr2={ savedCardAttr2 }
+              cardAttr3={ savedCardAttr3 }
+              cardImage={ savedCardImage }
+              cardRare={ savedCardRare }
+              cardTrunfo={ savedCardTrunfo }
+            />
+          );
+        })}
+
       </div>
     );
   }
