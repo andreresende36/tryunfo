@@ -17,7 +17,7 @@ class App extends React.Component {
     isSaveButtonDisabled: true,
     cardsList: [],
     nameFilter: '',
-    // rareFilter: '',
+    rareFilter: 'todas',
   };
 
   onSaveButtonClick = (e) => {
@@ -94,6 +94,17 @@ class App extends React.Component {
 
   normalize = (string) => string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
+  filterCards = (nameFilter, rareFilter) => {
+    const { state: { cardsList }, normalize } = this;
+    const filterName = cardsList.filter((card) => normalize(card.cardName).includes(
+      normalize(nameFilter),
+    ));
+    if (rareFilter !== 'todas') {
+      return filterName.filter((card) => card.cardRare === rareFilter);
+    }
+    return filterName;
+  };
+
   render() {
     const {
       state: {
@@ -109,12 +120,12 @@ class App extends React.Component {
         isSaveButtonDisabled,
         cardsList,
         nameFilter,
-        // rareFilter,
+        rareFilter,
       },
       onInputChange,
       onSaveButtonClick,
       removeCard,
-      normalize,
+      filterCards,
     } = this;
 
     return (
@@ -163,17 +174,19 @@ class App extends React.Component {
               onChange={ onInputChange }
             />
 
-            {/* Filtro de raridade
+            {/* Filtro de raridade */}
             <select
               data-testid="rare-filter"
-              name="rare-filter"
-              id="rare-filter"
-              onChange={ cardsListFilter }
+              name="rareFilter"
+              id="rareFilter"
+              value={ rareFilter }
+              onChange={ onInputChange }
             >
+              <option value="todas">Todas</option>
               <option value="normal">Normal</option>
               <option value="raro">Raro</option>
               <option value="muito raro">Muito raro</option>
-            </select> */}
+            </select>
 
             {/* Filtro de Super Trunfo */}
             {/* <label htmlFor="cardTrunfo">
@@ -187,9 +200,7 @@ class App extends React.Component {
               Super Trybe Trunfo
             </label> */}
           </div>
-          {cardsList.filter((card) => normalize(card.cardName).includes(
-            normalize(nameFilter),
-          )).map((card) => (
+          {filterCards(nameFilter, rareFilter).map((card) => (
             <Card
               key={ card.cardName }
               cardName={ card.cardName }
