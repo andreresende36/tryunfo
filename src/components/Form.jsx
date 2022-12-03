@@ -120,22 +120,23 @@ export default class Form extends Component {
         <br />
 
         {/* É super Trunfo? */}
-        { !hasTrunfo ? (
-          <>
-            <label htmlFor="cardTrunfo">
-              Essa carta é Super-trunfo?
-              <input
-                type="checkbox"
-                data-testid="trunfo-input"
-                name="cardTrunfo"
-                id="cardTrunfo"
-                checked={ cardTrunfo }
-                onChange={ onInputChange }
-              />
-            </label>
-            <br />
-          </>
-        ) : (<p>Você já tem um Super Trunfo em seu baralho</p>)}
+        { hasTrunfo ? (<p>Você já tem um Super Trunfo em seu baralho</p>)
+          : (
+            <>
+              <label htmlFor="cardTrunfo">
+                Essa carta é Super-trunfo?
+                <input
+                  type="checkbox"
+                  data-testid="trunfo-input"
+                  name="cardTrunfo"
+                  id="cardTrunfo"
+                  checked={ cardTrunfo }
+                  onChange={ onInputChange }
+                />
+              </label>
+              <br />
+            </>
+          )}
 
         {/* Botão */}
         <button

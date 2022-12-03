@@ -28,20 +28,11 @@ class App extends React.Component {
       cardAttr2: '0',
       cardAttr3: '0',
       cardRare: 'normal',
-      hasTrunfo: !!prevState.cardTrunfo,
-      cardsList: [...prevState.cardsList,
-        { savedCardName: prevState.cardName,
-          savedCardDescription: prevState.cardDescription,
-          savedCardAttr1: prevState.cardAttr1,
-          savedCardAttr2: prevState.cardAttr2,
-          savedCardAttr3: prevState.cardAttr3,
-          savedCardImage: prevState.cardImage,
-          savedCardRare: prevState.cardRare,
-          savedCardTrunfo: prevState.cardTrunfo }],
+      hasTrunfo: prevState.cardsList.some((card) => card.cardTrunfo === true)
+        ? true : !!prevState.cardTrunfo,
+      cardsList: [...prevState.cardsList, prevState],
     }), () => {
-      const { cardsList } = this.state;
       this.setState({ cardTrunfo: false });
-      console.log(cardsList);
     });
   };
 
@@ -86,6 +77,19 @@ class App extends React.Component {
     this.setState({ [name]: value }, this.checkEnablingButton);
   };
 
+  removeCard = ({ target }) => {
+    const cardName = target.parentElement.firstChild.innerHTML;
+
+    this.setState((prevState) => ({
+      cardsList: prevState.cardsList.filter((card) => card.cardName !== cardName),
+    }), () => {
+      const { cardsList } = this.state;
+      this.setState(() => ({
+        hasTrunfo: cardsList.some((item) => item.cardTrunfo === true),
+      }));
+    });
+  };
+
   render() {
     const {
       state: {
@@ -103,6 +107,7 @@ class App extends React.Component {
       },
       onInputChange,
       onSaveButtonClick,
+      removeCard,
     } = this;
     return (
       <div>
@@ -130,33 +135,26 @@ class App extends React.Component {
           cardImage={ cardImage }
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
+          button={ false }
+          removeCard={ removeCard }
         />
         {/* Lista de cards */}
-        { cardsList.map((card) => {
-          const {
-            savedCardName,
-            savedCardDescription,
-            savedCardAttr1,
-            savedCardAttr2,
-            savedCardAttr3,
-            savedCardImage,
-            savedCardRare,
-            savedCardTrunfo,
-          } = card;
-          return (
-            <Card
-              key={ savedCardName }
-              cardName={ savedCardName }
-              cardDescription={ savedCardDescription }
-              cardAttr1={ savedCardAttr1 }
-              cardAttr2={ savedCardAttr2 }
-              cardAttr3={ savedCardAttr3 }
-              cardImage={ savedCardImage }
-              cardRare={ savedCardRare }
-              cardTrunfo={ savedCardTrunfo }
-            />
-          );
-        })}
+        {cardsList.map((card, index) => (
+          <Card
+            key={ card.cardName }
+            cardName={ card.cardName }
+            cardDescription={ card.cardDescription }
+            cardAttr1={ card.cardAttr1 }
+            cardAttr2={ card.cardAttr2 }
+            cardAttr3={ card.cardAttr3 }
+            cardImage={ card.cardImage }
+            cardRare={ card.cardRare }
+            cardTrunfo={ card.cardTrunfo }
+            id={ `card${index}` }
+            button
+            removeCard={ removeCard }
+          />
+        ))}
 
       </div>
     );
