@@ -16,6 +16,8 @@ class App extends React.Component {
     hasTrunfo: false,
     isSaveButtonDisabled: true,
     cardsList: [],
+    nameFilter: '',
+    // rareFilter: '',
   };
 
   onSaveButtonClick = (e) => {
@@ -90,6 +92,8 @@ class App extends React.Component {
     });
   };
 
+  normalize = (string) => string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
   render() {
     const {
       state: {
@@ -104,11 +108,15 @@ class App extends React.Component {
         hasTrunfo,
         isSaveButtonDisabled,
         cardsList,
+        nameFilter,
+        // rareFilter,
       },
       onInputChange,
       onSaveButtonClick,
       removeCard,
+      normalize,
     } = this;
+
     return (
       <div>
         <h1>Tryunfo</h1>
@@ -138,23 +146,65 @@ class App extends React.Component {
           button={ false }
           removeCard={ removeCard }
         />
-        {/* Lista de cards */}
-        {cardsList.map((card, index) => (
-          <Card
-            key={ card.cardName }
-            cardName={ card.cardName }
-            cardDescription={ card.cardDescription }
-            cardAttr1={ card.cardAttr1 }
-            cardAttr2={ card.cardAttr2 }
-            cardAttr3={ card.cardAttr3 }
-            cardImage={ card.cardImage }
-            cardRare={ card.cardRare }
-            cardTrunfo={ card.cardTrunfo }
-            id={ `card${index}` }
-            button
-            removeCard={ removeCard }
-          />
-        ))}
+        {/* Container de cards */}
+        <div className="saved-cards-container">
+
+          {/* Filtro de cards */}
+          <div className="cards-filter">
+            <span>Filtros de busca</span>
+
+            {/* Filtro de nomes */}
+            <input
+              type="text"
+              data-testid="name-filter"
+              name="nameFilter"
+              id="nameFilter"
+              value={ nameFilter }
+              onChange={ onInputChange }
+            />
+
+            {/* Filtro de raridade
+            <select
+              data-testid="rare-filter"
+              name="rare-filter"
+              id="rare-filter"
+              onChange={ cardsListFilter }
+            >
+              <option value="normal">Normal</option>
+              <option value="raro">Raro</option>
+              <option value="muito raro">Muito raro</option>
+            </select> */}
+
+            {/* Filtro de Super Trunfo */}
+            {/* <label htmlFor="cardTrunfo">
+              <input
+                type="checkbox"
+                data-testid="trunfo-filter"
+                name="trunfo-filter"
+                id="trunfo-filter"
+                onChange={ cardsListFilter }
+              />
+              Super Trybe Trunfo
+            </label> */}
+          </div>
+          {cardsList.filter((card) => normalize(card.cardName).includes(
+            normalize(nameFilter),
+          )).map((card) => (
+            <Card
+              key={ card.cardName }
+              cardName={ card.cardName }
+              cardDescription={ card.cardDescription }
+              cardAttr1={ card.cardAttr1 }
+              cardAttr2={ card.cardAttr2 }
+              cardAttr3={ card.cardAttr3 }
+              cardImage={ card.cardImage }
+              cardRare={ card.cardRare }
+              cardTrunfo={ card.cardTrunfo }
+              button
+              removeCard={ removeCard }
+            />
+          ))}
+        </div>
 
       </div>
     );
