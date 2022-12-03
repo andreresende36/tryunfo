@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from './components/Card';
 import Form from './components/Form';
+import Filter from './components/Filter';
 import './App.css';
 
 class App extends React.Component {
@@ -163,69 +164,14 @@ class App extends React.Component {
           button={ false }
           removeCard={ removeCard }
         />
-        {/* Container de cards */}
-        <div className="saved-cards-container">
-
-          {/* Filtro de cards */}
-          <div className="cards-filter">
-            <span>Filtros de busca</span>
-
-            {/* Filtro de nomes */}
-            <input
-              type="text"
-              data-testid="name-filter"
-              name="nameFilter"
-              id="nameFilter"
-              value={ nameFilter }
-              onChange={ onInputChange }
-              disabled={ trunfoFilter }
-            />
-
-            {/* Filtro de raridade */}
-            <select
-              data-testid="rare-filter"
-              name="rareFilter"
-              id="rareFilter"
-              value={ rareFilter }
-              onChange={ onInputChange }
-              disabled={ trunfoFilter }
-            >
-              <option value="todas">Todas</option>
-              <option value="normal">Normal</option>
-              <option value="raro">Raro</option>
-              <option value="muito raro">Muito raro</option>
-            </select>
-
-            {/* Filtro de Super Trunfo */}
-            <label htmlFor="cardTrunfo">
-              <input
-                type="checkbox"
-                data-testid="trunfo-filter"
-                name="trunfoFilter"
-                id="trunfoFilter"
-                onChange={ onInputChange }
-                checked={ trunfoFilter }
-              />
-              Super Trybe Trunfo
-            </label>
-          </div>
-          {filterCards(nameFilter, rareFilter, trunfoFilter).map((card) => (
-            <Card
-              key={ card.cardName }
-              cardName={ card.cardName }
-              cardDescription={ card.cardDescription }
-              cardAttr1={ card.cardAttr1 }
-              cardAttr2={ card.cardAttr2 }
-              cardAttr3={ card.cardAttr3 }
-              cardImage={ card.cardImage }
-              cardRare={ card.cardRare }
-              cardTrunfo={ card.cardTrunfo }
-              button
-              removeCard={ removeCard }
-            />
-          ))}
-        </div>
-
+        <Filter
+          nameFilter={ nameFilter }
+          rareFilter={ rareFilter }
+          onInputChange={ onInputChange }
+          trunfoFilter={ trunfoFilter }
+          filterCards={ filterCards }
+          removeCard={ removeCard }
+        />
       </div>
     );
   }
