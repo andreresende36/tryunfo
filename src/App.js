@@ -18,6 +18,7 @@ class App extends React.Component {
     cardsList: [],
     nameFilter: '',
     rareFilter: 'todas',
+    trunfoFilter: false,
   };
 
   onSaveButtonClick = (e) => {
@@ -94,8 +95,13 @@ class App extends React.Component {
 
   normalize = (string) => string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-  filterCards = (nameFilter, rareFilter) => {
+  filterCards = (nameFilter, rareFilter, trunfoFilter) => {
     const { state: { cardsList }, normalize } = this;
+
+    if (trunfoFilter) {
+      return cardsList.filter((card) => card.cardTrunfo);
+    }
+
     const filterName = cardsList.filter((card) => normalize(card.cardName).includes(
       normalize(nameFilter),
     ));
@@ -118,9 +124,9 @@ class App extends React.Component {
         cardTrunfo,
         hasTrunfo,
         isSaveButtonDisabled,
-        cardsList,
         nameFilter,
         rareFilter,
+        trunfoFilter,
       },
       onInputChange,
       onSaveButtonClick,
@@ -172,6 +178,7 @@ class App extends React.Component {
               id="nameFilter"
               value={ nameFilter }
               onChange={ onInputChange }
+              disabled={ trunfoFilter }
             />
 
             {/* Filtro de raridade */}
@@ -181,6 +188,7 @@ class App extends React.Component {
               id="rareFilter"
               value={ rareFilter }
               onChange={ onInputChange }
+              disabled={ trunfoFilter }
             >
               <option value="todas">Todas</option>
               <option value="normal">Normal</option>
@@ -189,18 +197,19 @@ class App extends React.Component {
             </select>
 
             {/* Filtro de Super Trunfo */}
-            {/* <label htmlFor="cardTrunfo">
+            <label htmlFor="cardTrunfo">
               <input
                 type="checkbox"
                 data-testid="trunfo-filter"
-                name="trunfo-filter"
-                id="trunfo-filter"
-                onChange={ cardsListFilter }
+                name="trunfoFilter"
+                id="trunfoFilter"
+                onChange={ onInputChange }
+                checked={ trunfoFilter }
               />
               Super Trybe Trunfo
-            </label> */}
+            </label>
           </div>
-          {filterCards(nameFilter, rareFilter).map((card) => (
+          {filterCards(nameFilter, rareFilter, trunfoFilter).map((card) => (
             <Card
               key={ card.cardName }
               cardName={ card.cardName }
